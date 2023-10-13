@@ -48,7 +48,6 @@ func Put(url string, data []byte) ([]byte, int, error) {
 		return nil, http.StatusInternalServerError, err
 	}
 
-	// Set headers if needed
 	req.Header.Set("Content-Type", jsonType)
 
 	// Create an HTTP client
