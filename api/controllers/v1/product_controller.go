@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"api-gateway/api/controllers"
 	"api-gateway/config"
 	"api-gateway/dto/response"
 	"api-gateway/dto/response/v1/product"
@@ -27,24 +28,24 @@ func (c *productController) GetProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Get(url)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
 	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response product.GetProductResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
-	return ctx.JSON(statusCode, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) ListProducts(ctx echo.Context) error {
@@ -53,25 +54,25 @@ func (c *productController) ListProducts(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Get(url)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
 	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response product.ListProductsResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
-	return ctx.JSON(statusCode, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) CreateProduct(ctx echo.Context) error {
@@ -85,26 +86,26 @@ func (c *productController) CreateProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Post(url, reqBody)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not CREATED
 	if statusCode != http.StatusCreated {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Return the product data as JSON
-	return ctx.JSON(statusCode, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) UpdateProduct(ctx echo.Context) error {
@@ -119,24 +120,25 @@ func (c *productController) UpdateProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
-	if statusCode == http.StatusOK {
+	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
-	return ctx.JSON(http.StatusOK, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) DisableProduct(ctx echo.Context) error {
@@ -151,24 +153,25 @@ func (c *productController) DisableProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
-	if statusCode == http.StatusOK {
+	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
-	return ctx.JSON(http.StatusOK, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) EnableProduct(ctx echo.Context) error {
@@ -183,24 +186,25 @@ func (c *productController) EnableProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
-	if statusCode == http.StatusOK {
+	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
-	return ctx.JSON(http.StatusOK, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) IncreaseBookedQuota(ctx echo.Context) error {
@@ -215,24 +219,25 @@ func (c *productController) IncreaseBookedQuota(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
-	if statusCode == http.StatusOK {
+	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
-	return ctx.JSON(http.StatusOK, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }
 
 func (c *productController) DecreaseBookedQuota(ctx echo.Context) error {
@@ -247,22 +252,23 @@ func (c *productController) DecreaseBookedQuota(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
 
 	// Early return if statusCode is not OK
-	if statusCode == http.StatusOK {
+	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+
+			return controllers.WriteError(ctx, statusCode, err)
 		}
-		return ctx.JSON(statusCode, response)
+		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
 	}
 
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
+		return controllers.WriteError(ctx, statusCode, err)
 	}
-	return ctx.JSON(http.StatusOK, response)
+	return controllers.WriteSuccess(ctx, statusCode, response.Result)
 }

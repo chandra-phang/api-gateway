@@ -11,6 +11,7 @@ var config *Config
 
 type Config struct {
 	ProductSvcHost string
+	AuthSvcHost    string
 }
 
 func InitConfig() {
@@ -21,6 +22,7 @@ func InitConfig() {
 
 	config = &Config{
 		ProductSvcHost: os.Getenv("PRODUCT_SERVICE_HOST"),
+		AuthSvcHost:    os.Getenv("AUTH_SERVICE_HOST"),
 	}
 }
 

@@ -12,8 +12,13 @@ func InitRoutes() {
 	e := echo.New()
 
 	productV1 := v1.InitProductController()
+	authV1 := v1.InitAuthController()
 
 	v1Api := e.Group("apigw/v1")
+	v1Api.POST("/login", authV1.Login)
+	v1Api.POST("/logout", authV1.Logout)
+	v1Api.POST("/authenticate", authV1.Authenticate)
+
 	v1Api.Use(middleware.AuthMiddleware)
 
 	// ProductService API
