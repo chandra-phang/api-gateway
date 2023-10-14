@@ -27,7 +27,6 @@ func (c *productController) GetProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Get(url)
 	if err != nil {
-		fmt.Println("Error when getting product", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -35,7 +34,6 @@ func (c *productController) GetProduct(ctx echo.Context) error {
 	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -44,7 +42,6 @@ func (c *productController) GetProduct(ctx echo.Context) error {
 	// Deserialize the response
 	var response product.GetProductResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 	return ctx.JSON(statusCode, response)
@@ -56,7 +53,6 @@ func (c *productController) ListProducts(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Get(url)
 	if err != nil {
-		fmt.Println("Error when getting products", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -64,7 +60,6 @@ func (c *productController) ListProducts(ctx echo.Context) error {
 	if statusCode != http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -73,7 +68,6 @@ func (c *productController) ListProducts(ctx echo.Context) error {
 	// Deserialize the response
 	var response product.ListProductsResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 
@@ -91,7 +85,6 @@ func (c *productController) CreateProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Post(url, reqBody)
 	if err != nil {
-		fmt.Println("Error when getting products", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -99,7 +92,6 @@ func (c *productController) CreateProduct(ctx echo.Context) error {
 	if statusCode != http.StatusCreated {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -108,7 +100,6 @@ func (c *productController) CreateProduct(ctx echo.Context) error {
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 
@@ -128,7 +119,6 @@ func (c *productController) UpdateProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		fmt.Println("Error when disable product", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -136,7 +126,6 @@ func (c *productController) UpdateProduct(ctx echo.Context) error {
 	if statusCode == http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -145,7 +134,6 @@ func (c *productController) UpdateProduct(ctx echo.Context) error {
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 	return ctx.JSON(http.StatusOK, response)
@@ -163,7 +151,6 @@ func (c *productController) DisableProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		fmt.Println("Error when update product", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -171,7 +158,6 @@ func (c *productController) DisableProduct(ctx echo.Context) error {
 	if statusCode == http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -180,7 +166,6 @@ func (c *productController) DisableProduct(ctx echo.Context) error {
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 	return ctx.JSON(http.StatusOK, response)
@@ -198,7 +183,6 @@ func (c *productController) EnableProduct(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		fmt.Println("Error when enable product", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -206,7 +190,6 @@ func (c *productController) EnableProduct(ctx echo.Context) error {
 	if statusCode == http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -215,7 +198,6 @@ func (c *productController) EnableProduct(ctx echo.Context) error {
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 	return ctx.JSON(http.StatusOK, response)
@@ -233,7 +215,6 @@ func (c *productController) IncreaseBookedQuota(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		fmt.Println("Error when update product", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -241,7 +222,6 @@ func (c *productController) IncreaseBookedQuota(ctx echo.Context) error {
 	if statusCode == http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -250,7 +230,6 @@ func (c *productController) IncreaseBookedQuota(ctx echo.Context) error {
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 	return ctx.JSON(http.StatusOK, response)
@@ -268,7 +247,6 @@ func (c *productController) DecreaseBookedQuota(ctx echo.Context) error {
 
 	resp, statusCode, err := request.Put(url, reqBody)
 	if err != nil {
-		fmt.Println("Error when update product", err.Error())
 		return ctx.JSON(statusCode, map[string]string{"error": err.Error()})
 	}
 
@@ -276,7 +254,6 @@ func (c *productController) DecreaseBookedQuota(ctx echo.Context) error {
 	if statusCode == http.StatusOK {
 		var response response.FailureResponse
 		if err := json.Unmarshal(resp, &response); err != nil {
-			fmt.Println("Error when unmarshalling response", err.Error())
 			return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 		}
 		return ctx.JSON(statusCode, response)
@@ -285,7 +262,6 @@ func (c *productController) DecreaseBookedQuota(ctx echo.Context) error {
 	// Deserialize the response
 	var response response.SuccessResponse
 	if err := json.Unmarshal(resp, &response); err != nil {
-		fmt.Println("Error when unmarshalling response", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal Server Error"})
 	}
 	return ctx.JSON(http.StatusOK, response)

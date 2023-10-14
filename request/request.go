@@ -2,7 +2,6 @@ package request
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -12,7 +11,6 @@ const jsonType = "application/json"
 func Get(url string) ([]byte, int, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, resp.StatusCode, err
 	}
 
@@ -28,7 +26,6 @@ func Post(url string, data []byte) ([]byte, int, error) {
 
 	resp, err := http.Post(url, jsonType, body)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, resp.StatusCode, err
 	}
 
@@ -44,7 +41,6 @@ func PostWithAuthorization(url string, data []byte, authorization string) ([]byt
 
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, http.StatusInternalServerError, err
 	}
 
@@ -57,7 +53,6 @@ func PostWithAuthorization(url string, data []byte, authorization string) ([]byt
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error making POST request:", err)
 		return nil, http.StatusInternalServerError, err
 	}
 	defer resp.Body.Close()
@@ -74,7 +69,6 @@ func Put(url string, data []byte) ([]byte, int, error) {
 
 	req, err := http.NewRequest("PUT", url, body)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, http.StatusInternalServerError, err
 	}
 
@@ -86,7 +80,6 @@ func Put(url string, data []byte) ([]byte, int, error) {
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error making PUT request:", err)
 		return nil, http.StatusInternalServerError, err
 	}
 	defer resp.Body.Close()
