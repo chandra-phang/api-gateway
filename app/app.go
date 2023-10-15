@@ -18,6 +18,8 @@ func (a Application) InitApplication() {
 	cfg := config.InitConfig()
 
 	httpconnector.InitAuthServiceConnector(*cfg)
+	httpconnector.InitProductServiceConnector(*cfg)
+	httpconnector.InitOrderServiceConnector(*cfg)
 
 	api.InitRoutes()
 }
