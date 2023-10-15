@@ -38,4 +38,3 @@ go run main.go
 ### 3. Access the Server
 
 The server will be accessible at [http://localhost:8000](http://localhost:8000)
-```
