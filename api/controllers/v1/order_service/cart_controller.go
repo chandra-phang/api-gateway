@@ -30,7 +30,7 @@ func (c *cartController) AddToCart(ctx echo.Context) error {
 	}
 
 	authorization := ctx.Request().Header.Get("Authorization")
-	resp, statusCode, err := request.PostWithAuthorization(url, reqBody, authorization)
+	resp, statusCode, err := request.Post(url, reqBody, authorization)
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}

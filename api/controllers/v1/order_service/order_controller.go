@@ -31,7 +31,7 @@ func (c *orderController) CreateOrder(ctx echo.Context) error {
 	}
 
 	authorization := ctx.Request().Header.Get("Authorization")
-	resp, statusCode, err := request.PostWithAuthorization(url, reqBody, authorization)
+	resp, statusCode, err := request.Post(url, reqBody, authorization)
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -66,7 +66,7 @@ func (c *orderController) CancelOrder(ctx echo.Context) error {
 	}
 
 	authorization := ctx.Request().Header.Get("Authorization")
-	resp, statusCode, err := request.PutWithAuthorization(url, reqBody, authorization)
+	resp, statusCode, err := request.Put(url, reqBody, authorization)
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -95,7 +95,7 @@ func (c *orderController) ListOrders(ctx echo.Context) error {
 	url := fmt.Sprintf("%s/v1/orders", config.OrderSvcHost)
 
 	authorization := ctx.Request().Header.Get("Authorization")
-	resp, statusCode, err := request.GetWithAuthorization(url, authorization)
+	resp, statusCode, err := request.Get(url, authorization)
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}

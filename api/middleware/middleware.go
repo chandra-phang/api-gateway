@@ -27,7 +27,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// pass the Authorization header to auth service API
 		authUrl := fmt.Sprintf("%s/v1/authenticate", config.GetConfig().AuthSvcHost)
-		_, statusCode, err := request.PostWithAuthorization(authUrl, data, authHeader)
+		_, statusCode, err := request.Post(authUrl, data, authHeader)
 		if err != nil {
 			return controllers.WriteError(c, http.StatusInternalServerError, err)
 		}

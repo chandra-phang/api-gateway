@@ -2,119 +2,42 @@ package authservice
 
 import (
 	"api-gateway/api/controllers"
-	"api-gateway/config"
-	"api-gateway/dto/request/v1/auth"
-	"api-gateway/dto/response"
-	"api-gateway/request"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"api-gateway/httpconnector"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 type authController struct {
+	authServiceCon *httpconnector.AuthServiceConnector
 }
 
 func InitAuthController() *authController {
-	return &authController{}
+	return &authController{
+		authServiceCon: httpconnector.GetAuthServiceConnector(),
+	}
 }
 
 func (c *authController) Login(ctx echo.Context) error {
-	config := config.GetConfig()
-	url := fmt.Sprintf("%s/v1/login", config.AuthSvcHost)
-
-	reqBody, err := ioutil.ReadAll(ctx.Request().Body)
-	if err != nil {
-		return err
-	}
-
-	resp, statusCode, err := request.Post(url, reqBody)
-	if err != nil {
-		return controllers.WriteError(ctx, statusCode, err)
-	}
-
-	// Early return if statusCode is not OK
-	if statusCode != http.StatusOK {
-		var response response.FailureResponse
-		if err := json.Unmarshal(resp, &response); err != nil {
-			return controllers.WriteError(ctx, statusCode, err)
-		}
-		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
-	}
-
-	// Deserialize the response
-	var response response.SuccessResponse
-	if err := json.Unmarshal(resp, &response); err != nil {
-		return controllers.WriteError(ctx, statusCode, err)
-	}
-
-	// Return the auth data as JSON
-	return controllers.WriteSuccess(ctx, statusCode, response.Result)
-}
-
-func (c *authController) Logout(ctx echo.Context) error {
-	config := config.GetConfig()
-	url := fmt.Sprintf("%s/v1/logout", config.AuthSvcHost)
-
-	authorization := ctx.Request().Header.Get("Authorization")
-	resp, statusCode, err := request.PostWithAuthorization(url, []byte{}, authorization)
-	if err != nil {
-		return controllers.WriteError(ctx, statusCode, err)
-	}
-
-	// Early return if statusCode is not OK
-	if statusCode != http.StatusOK {
-		var response response.FailureResponse
-		if err := json.Unmarshal(resp, &response); err != nil {
-			return controllers.WriteError(ctx, statusCode, err)
-		}
-		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
-	}
-
-	// Deserialize the response
-	var response response.SuccessResponse
-	if err := json.Unmarshal(resp, &response); err != nil {
-		return controllers.WriteError(ctx, statusCode, err)
-	}
-
-	// Return the auth data as JSON
-	return controllers.WriteSuccess(ctx, statusCode, response.Result)
-}
-
-func (c *authController) Authenticate(ctx echo.Context) error {
-	config := config.GetConfig()
-	url := fmt.Sprintf("%s/v1/authenticate", config.AuthSvcHost)
-
-	dto := auth.AuthenticateDTO{
-		SourceUri: ctx.Request().Host + ctx.Request().RequestURI,
-	}
-	data, err := json.Marshal(dto)
+	result, err := c.authServiceCon.Login(ctx)
 	if err != nil {
 		return controllers.WriteError(ctx, http.StatusInternalServerError, err)
 	}
-	authorization := ctx.Request().Header.Get("Authorization")
-	resp, statusCode, err := request.PostWithAuthorization(url, data, authorization)
+	return controllers.WriteSuccess(ctx, http.StatusOK, result)
+}
+
+func (c *authController) Logout(ctx echo.Context) error {
+	result, err := c.authServiceCon.Logout(ctx)
 	if err != nil {
-		return controllers.WriteError(ctx, statusCode, err)
+		return controllers.WriteError(ctx, http.StatusInternalServerError, err)
 	}
+	return controllers.WriteSuccess(ctx, http.StatusOK, result)
+}
 
-	// Early return if statusCode is not OK
-	if statusCode != http.StatusOK {
-		var response response.FailureResponse
-		if err := json.Unmarshal(resp, &response); err != nil {
-			return controllers.WriteError(ctx, statusCode, err)
-		}
-		return controllers.WriteErrorMsg(ctx, statusCode, response.Failure)
+func (c *authController) Authenticate(ctx echo.Context) error {
+	result, err := c.authServiceCon.Authenticate(ctx)
+	if err != nil {
+		return controllers.WriteError(ctx, http.StatusInternalServerError, err)
 	}
-
-	// Deserialize the response
-	var response response.SuccessResponse
-	if err := json.Unmarshal(resp, &response); err != nil {
-		return controllers.WriteError(ctx, statusCode, err)
-	}
-
-	// Return the auth data as JSON
-	return controllers.WriteSuccess(ctx, statusCode, response.Result)
+	return controllers.WriteSuccess(ctx, http.StatusOK, result)
 }

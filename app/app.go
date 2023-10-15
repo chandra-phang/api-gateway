@@ -3,6 +3,7 @@ package app
 import (
 	"api-gateway/api"
 	"api-gateway/config"
+	"api-gateway/httpconnector"
 )
 
 type Application struct {
@@ -14,7 +15,9 @@ func NewApplication() Application {
 }
 
 func (a Application) InitApplication() {
-	config.InitConfig()
+	cfg := config.InitConfig()
+
+	httpconnector.InitAuthServiceConnector(*cfg)
 
 	api.InitRoutes()
 }

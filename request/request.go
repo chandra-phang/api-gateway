@@ -8,27 +8,17 @@ import (
 
 const jsonType = "application/json"
 
-func Get(url string) ([]byte, int, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, resp.StatusCode, err
-	}
-
-	respBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, resp.StatusCode, err
-	}
-	return respBytes, resp.StatusCode, nil
-}
-
-func GetWithAuthorization(url string, authorization string) ([]byte, int, error) {
+func Get(url string, authorization string) ([]byte, int, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, http.StatusInternalServerError, err
 	}
 
 	req.Header.Set("Content-Type", jsonType)
-	req.Header.Set("Authorization", authorization)
+
+	if authorization != "" {
+		req.Header.Set("Authorization", authorization)
+	}
 
 	// Create an HTTP client
 	client := http.Client{}
@@ -47,22 +37,7 @@ func GetWithAuthorization(url string, authorization string) ([]byte, int, error)
 	return respBytes, resp.StatusCode, nil
 }
 
-func Post(url string, data []byte) ([]byte, int, error) {
-	body := bytes.NewBuffer(data)
-
-	resp, err := http.Post(url, jsonType, body)
-	if err != nil {
-		return nil, resp.StatusCode, err
-	}
-
-	respBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, resp.StatusCode, err
-	}
-	return respBytes, resp.StatusCode, nil
-}
-
-func PostWithAuthorization(url string, data []byte, authorization string) ([]byte, int, error) {
+func Post(url string, data []byte, authorization string) ([]byte, int, error) {
 	body := bytes.NewBuffer(data)
 
 	req, err := http.NewRequest("POST", url, body)
@@ -71,7 +46,9 @@ func PostWithAuthorization(url string, data []byte, authorization string) ([]byt
 	}
 
 	req.Header.Set("Content-Type", jsonType)
-	req.Header.Set("Authorization", authorization)
+	if authorization != "" {
+		req.Header.Set("Authorization", authorization)
+	}
 
 	// Create an HTTP client
 	client := http.Client{}
@@ -90,7 +67,7 @@ func PostWithAuthorization(url string, data []byte, authorization string) ([]byt
 	return respBytes, resp.StatusCode, nil
 }
 
-func Put(url string, data []byte) ([]byte, int, error) {
+func Put(url string, data []byte, authorization string) ([]byte, int, error) {
 	body := bytes.NewBuffer(data)
 
 	req, err := http.NewRequest("PUT", url, body)
@@ -100,33 +77,9 @@ func Put(url string, data []byte) ([]byte, int, error) {
 
 	req.Header.Set("Content-Type", jsonType)
 
-	// Create an HTTP client
-	client := http.Client{}
-
-	// Send the request
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, http.StatusInternalServerError, err
+	if authorization != "" {
+		req.Header.Set("Authorization", authorization)
 	}
-	defer resp.Body.Close()
-
-	respBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, resp.StatusCode, err
-	}
-	return respBytes, resp.StatusCode, nil
-}
-
-func PutWithAuthorization(url string, data []byte, authorization string) ([]byte, int, error) {
-	body := bytes.NewBuffer(data)
-
-	req, err := http.NewRequest("PUT", url, body)
-	if err != nil {
-		return nil, http.StatusInternalServerError, err
-	}
-
-	req.Header.Set("Content-Type", jsonType)
-	req.Header.Set("Authorization", authorization)
 
 	// Create an HTTP client
 	client := http.Client{}

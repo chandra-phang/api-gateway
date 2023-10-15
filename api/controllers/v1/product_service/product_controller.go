@@ -26,7 +26,7 @@ func (c *productController) GetProduct(ctx echo.Context) error {
 	config := config.GetConfig()
 	url := fmt.Sprintf("%s/v1/products/%s", config.ProductSvcHost, id)
 
-	resp, statusCode, err := request.Get(url)
+	resp, statusCode, err := request.Get(url, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -52,7 +52,7 @@ func (c *productController) ListProducts(ctx echo.Context) error {
 	config := config.GetConfig()
 	url := fmt.Sprintf("%s/v1/products", config.ProductSvcHost)
 
-	resp, statusCode, err := request.Get(url)
+	resp, statusCode, err := request.Get(url, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -84,7 +84,7 @@ func (c *productController) CreateProduct(ctx echo.Context) error {
 		return err
 	}
 
-	resp, statusCode, err := request.Post(url, reqBody)
+	resp, statusCode, err := request.Post(url, reqBody, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -118,7 +118,7 @@ func (c *productController) UpdateProduct(ctx echo.Context) error {
 		return err
 	}
 
-	resp, statusCode, err := request.Put(url, reqBody)
+	resp, statusCode, err := request.Put(url, reqBody, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -151,7 +151,7 @@ func (c *productController) DisableProduct(ctx echo.Context) error {
 		return err
 	}
 
-	resp, statusCode, err := request.Put(url, reqBody)
+	resp, statusCode, err := request.Put(url, reqBody, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -184,7 +184,7 @@ func (c *productController) EnableProduct(ctx echo.Context) error {
 		return err
 	}
 
-	resp, statusCode, err := request.Put(url, reqBody)
+	resp, statusCode, err := request.Put(url, reqBody, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -217,7 +217,7 @@ func (c *productController) IncreaseBookedQuota(ctx echo.Context) error {
 		return err
 	}
 
-	resp, statusCode, err := request.Put(url, reqBody)
+	resp, statusCode, err := request.Put(url, reqBody, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
@@ -250,7 +250,7 @@ func (c *productController) DecreaseBookedQuota(ctx echo.Context) error {
 		return err
 	}
 
-	resp, statusCode, err := request.Put(url, reqBody)
+	resp, statusCode, err := request.Put(url, reqBody, "")
 	if err != nil {
 		return controllers.WriteError(ctx, statusCode, err)
 	}
