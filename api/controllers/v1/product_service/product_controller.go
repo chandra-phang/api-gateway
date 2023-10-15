@@ -1,4 +1,4 @@
-package controller
+package productservice
 
 import (
 	"api-gateway/api/controllers"

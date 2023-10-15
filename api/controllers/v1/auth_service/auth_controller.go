@@ -1,4 +1,4 @@
-package controller
+package authservice
 
 import (
 	"api-gateway/api/controllers"
