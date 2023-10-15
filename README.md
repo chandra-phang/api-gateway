@@ -37,7 +37,5 @@ go run main.go
 
 ### 3. Access the Server
 
-The server will be accessible at [http://localhost:8000](http://localhost:8000).
+The server will be accessible at [http://localhost:8000](http://localhost:8000)
 ```
-
-This version organizes the sections more clearly and uses proper formatting for code snippets and commands. Feel free to adjust it further based on your preferences.
